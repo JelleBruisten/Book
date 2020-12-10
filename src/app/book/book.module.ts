@@ -3,15 +3,15 @@ import { CommonModule } from '@angular/common';
 
 import { BookRoutingModule } from './book-routing.module';
 import { OverviewComponent } from './components/overview/overview.component';
-import { CreateComponent } from './components/create/create.component';
-import { ViewComponent } from './components/view/view.component';
 import { StoreModule } from '@ngrx/store';
 import * as fromBook from './reducers/book.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { BookEffects } from './effects/book.effects';
+import { AddComponent } from './components/add/add.component';
+import { EditComponent } from './components/edit/edit.component';
 
 @NgModule({
-  declarations: [OverviewComponent, CreateComponent, ViewComponent],
+  declarations: [OverviewComponent, AddComponent, EditComponent],
   imports: [
     CommonModule,
     BookRoutingModule,
