@@ -26,12 +26,10 @@ export class BookService {
   }
 
   updateBook(book: Book): Observable<any> {
-    return this.http.put(`${apiUrl}/${book.isbn}`, book);
+    return this.http.put(`${apiUrl}`, book);
   }
 
   deleteBook(book: Book): Observable<any> {
-    return this.http.delete(`${apiUrl}/${book.isbn}`, {
-      responseType: "json"
-    });
+    return this.http.delete(`${apiUrl}/${book.isbn}`);
   }
 }
