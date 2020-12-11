@@ -10,14 +10,14 @@ const apiUrl = "http://localhost:3000/book";
 })
 export class BookService {
 
-  
+
   constructor(private http: HttpClient) { }
 
   getBooks(): Observable<Book[]> {
     return this.http.get<Book[]>(apiUrl);
   }
 
-  getBook(isbn: number): Observable<Book> {
+  getBook(isbn: number | string): Observable<Book> {
     return this.http.get<Book>(`${apiUrl}/${isbn}`);
   }
 
@@ -26,10 +26,12 @@ export class BookService {
   }
 
   updateBook(book: Book): Observable<any> {
-    return this.http.post(`${apiUrl}/${book.isbn}`, book);
+    return this.http.put(`${apiUrl}/${book.isbn}`, book);
   }
 
   deleteBook(book: Book): Observable<any> {
-    return this.http.delete(`${apiUrl}/${book.isbn}`);
+    return this.http.delete(`${apiUrl}/${book.isbn}`, {
+      responseType: "json"
+    });
   }
 }

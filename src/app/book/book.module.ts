@@ -1,12 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatTableModule } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 import { BookRoutingModule } from './book-routing.module';
 import { OverviewComponent } from './components/overview/overview.component';
-import { StoreModule } from '@ngrx/store';
-import * as fromBook from './reducers/book.reducer';
-import { EffectsModule } from '@ngrx/effects';
-import { BookEffects } from './effects/book.effects';
 import { AddComponent } from './components/add/add.component';
 import { EditComponent } from './components/edit/edit.component';
 
@@ -14,9 +16,13 @@ import { EditComponent } from './components/edit/edit.component';
   declarations: [OverviewComponent, AddComponent, EditComponent],
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     BookRoutingModule,
-    StoreModule.forFeature(fromBook.bookFeatureKey, fromBook.reducer),
-    EffectsModule.forFeature([BookEffects])
+    MatTableModule,
+    MatIconModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule
   ]
 })
 export class BookModule { }

@@ -7,11 +7,9 @@ import { OverviewComponent } from './components/overview/overview.component';
 const routes: Routes = [
   {
     path : '',
-    component: OverviewComponent
-  },
-  {
-    path: 'overview',
-    component: OverviewComponent
+    component: OverviewComponent,
+    // redirectTo: './overview',
+    pathMatch: 'full'
   },
   {
     path: 'add',
@@ -19,8 +17,13 @@ const routes: Routes = [
   },
   {
     path: 'edit/:isbn',
-    component: EditComponent
-  }
+    component: EditComponent,
+  },
+  {
+    path: 'edit',
+    pathMatch: 'full',
+    redirectTo : '',
+  },
 ];
 
 @NgModule({

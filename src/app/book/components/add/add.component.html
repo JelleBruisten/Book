@@ -1,1 +1,14 @@
-<p>add works!</p>
+<h2>Add book</h2>
+<form [formGroup]="bookForm" *ngIf="bookForm">
+
+  <ng-container *ngFor="let propName of bookProperties">
+    <mat-form-field appearance="outline">
+      <mat-label>{{ propName }}</mat-label>
+      <input matInput [formControlName]="propName" [placeholder]="propName">
+    </mat-form-field>
+  </ng-container>
+
+  <button mat-flat-button color="primary" (click)="saveBook()">
+    Save
+  </button>
+</form>
