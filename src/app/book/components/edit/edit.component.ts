@@ -7,10 +7,9 @@ import { BookService } from '../../services/book.service';
 @Component({
   selector: 'app-edit',
   templateUrl: './edit.component.html',
-  styleUrls: ['./edit.component.css']
+  styleUrls: ['./edit.component.css'],
 })
 export class EditComponent implements OnInit {
-
   bookProperties = bookProperties;
   bookForm: FormGroup;
   isbn: string;
@@ -21,11 +20,11 @@ export class EditComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private bookService: BookService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
-      if(params.has('isbn')) {
+      if (params.has('isbn')) {
         this.isbn = params.get('isbn');
         this.bookService.getBook(this.isbn).subscribe(
           (book: Book) => {
@@ -36,8 +35,7 @@ export class EditComponent implements OnInit {
             this.router.navigate(['../../'], { relativeTo: this.route });
           }
         );
-      }
-      else {
+      } else {
         this.router.navigate(['../'], { relativeTo: this.route });
       }
     });
@@ -45,11 +43,10 @@ export class EditComponent implements OnInit {
 
   createForm(book: Book) {
     const formDefinition = {};
-    for(const p of bookProperties) {
-      if(p in book) {
+    for (const p of bookProperties) {
+      if (p in book) {
         formDefinition[p] = book[p];
-      }
-      else {
+      } else {
         formDefinition[p] = null;
       }
     }
@@ -57,9 +54,10 @@ export class EditComponent implements OnInit {
   }
 
   saveBook() {
-    this.bookService.updateBook({... this.book, ... this.bookForm.value as Book}).subscribe(() => {
-      this.router.navigate(['../'], { relativeTo: this.route });
-    });
+    this.bookService
+      .updateBook({ ...this.book, ...(this.bookForm.value as Book) })
+      .subscribe(() => {
+        this.router.navigate(['../'], { relativeTo: this.route });
+      });
   }
-
 }

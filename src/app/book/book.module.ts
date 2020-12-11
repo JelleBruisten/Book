@@ -22,7 +22,7 @@ import { EditComponent } from './components/edit/edit.component';
     MatIconModule,
     MatButtonModule,
     MatFormFieldModule,
-    MatInputModule
-  ]
+    MatInputModule,
+  ],
 })
-export class BookModule { }
+export class BookModule {}

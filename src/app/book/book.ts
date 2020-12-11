@@ -10,12 +10,12 @@ export interface Book {
 }
 
 export const bookProperties = [
-  "isbn",
-  "title",
-  "author",
-  "publish_date",
-  "publisher",
-  "numOfPages",
-  "cover",
-  "introduction",
+  'isbn',
+  'title',
+  'author',
+  'publish_date',
+  'publisher',
+  'numOfPages',
+  'cover',
+  'introduction',
 ];

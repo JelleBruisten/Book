@@ -8,10 +8,9 @@ import { BookService } from '../../services/book.service';
 @Component({
   selector: 'app-add',
   templateUrl: './add.component.html',
-  styleUrls: ['./add.component.css']
+  styleUrls: ['./add.component.css'],
 })
 export class AddComponent implements OnInit {
-
   bookProperties = bookProperties;
   bookForm: FormGroup;
 
@@ -20,11 +19,11 @@ export class AddComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private bookService: BookService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     const formDefinition = {};
-    for(const p of bookProperties) {
+    for (const p of bookProperties) {
       formDefinition[p] = null;
     }
     this.bookForm = this.formBuilder.group(formDefinition);

@@ -6,14 +6,14 @@ import { OverviewComponent } from './components/overview/overview.component';
 
 const routes: Routes = [
   {
-    path : '',
+    path: '',
     component: OverviewComponent,
     // redirectTo: './overview',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: 'add',
-    component: AddComponent
+    component: AddComponent,
   },
   {
     path: 'edit/:isbn',
@@ -22,12 +22,12 @@ const routes: Routes = [
   {
     path: 'edit',
     pathMatch: 'full',
-    redirectTo : '',
+    redirectTo: '',
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class BookRoutingModule { }
+export class BookRoutingModule {}

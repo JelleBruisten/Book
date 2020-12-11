@@ -23,6 +23,7 @@
     "@angular/router": "~10.1.2",
     "@ngrx/effects": "^10.1.0",
     "@ngrx/store": "^10.1.0",
+    "prettier": "^2.2.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"
