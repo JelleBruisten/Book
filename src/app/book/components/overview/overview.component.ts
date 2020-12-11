@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { AuthenticationService } from 'src/app/authentication/services/authentication.service';
 import { Book } from '../../book';
 import { BookService } from '../../services/book.service';
 
@@ -16,8 +18,11 @@ export class OverviewComponent implements OnInit {
     'actions',
   ];
   books: Book[];
+  loggedin$: Observable<boolean>;
 
-  constructor(private bookService: BookService) {}
+  constructor(private authenticationService: AuthenticationService, private bookService: BookService) {
+    this.loggedin$ = this.authenticationService.loggedIn$;
+  }
 
   ngOnInit(): void {
     this.bookService

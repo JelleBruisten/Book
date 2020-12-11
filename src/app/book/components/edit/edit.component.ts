@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { AuthenticationService } from 'src/app/authentication/services/authentication.service';
 import { Book, bookProperties } from '../../book';
 import { BookService } from '../../services/book.service';
 
@@ -14,13 +16,17 @@ export class EditComponent implements OnInit {
   bookForm: FormGroup;
   isbn: string;
   book: Book;
+  loggedin$: Observable<boolean>;
 
   constructor(
+    private authenticationService: AuthenticationService,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private router: Router,
     private bookService: BookService
-  ) {}
+  ) {
+    this.loggedin$ = this.authenticationService.loggedIn$;
+  }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
@@ -51,6 +57,10 @@ export class EditComponent implements OnInit {
       }
     }
     this.bookForm = this.formBuilder.group(formDefinition);
+
+    if(!this.authenticationService.loggedIn) {
+      this.bookForm.disable();
+    }
   }
 
   saveBook() {

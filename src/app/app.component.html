@@ -3,7 +3,7 @@
   <button mat-button routerLink="book">
     <mat-icon>menu_book</mat-icon> List books
   </button>
-  <button mat-button routerLink="book/add">
+  <button mat-button routerLink="book/add" *ngIf="(loggedin$ | async)">
     <mat-icon>add</mat-icon> Add book
   </button>
 </mat-toolbar>
