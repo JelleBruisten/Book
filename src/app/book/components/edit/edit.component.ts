@@ -58,7 +58,7 @@ export class EditComponent implements OnInit {
     }
     this.bookForm = this.formBuilder.group(formDefinition);
 
-    if(!this.authenticationService.loggedIn) {
+    if (!this.authenticationService.loggedIn) {
       this.bookForm.disable();
     }
   }

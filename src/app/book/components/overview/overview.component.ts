@@ -20,7 +20,10 @@ export class OverviewComponent implements OnInit {
   books: Book[];
   loggedin$: Observable<boolean>;
 
-  constructor(private authenticationService: AuthenticationService, private bookService: BookService) {
+  constructor(
+    private authenticationService: AuthenticationService,
+    private bookService: BookService
+  ) {
     this.loggedin$ = this.authenticationService.loggedIn$;
   }
 

@@ -38,7 +38,7 @@
         <mat-icon>edit</mat-icon>
       </button>
       <button
-        *ngIf="(loggedin$ | async)"
+        *ngIf="loggedin$ | async"
         (click)="deleteBook(element)"
         mat-icon-button
         color="accent"

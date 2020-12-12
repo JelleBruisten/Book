@@ -1,1 +1,11 @@
-<p>login works!</p>
+<form [formGroup]="loginForm" *ngIf="loginForm" class="mat-elevation-z6">
+  <h2>Login</h2>
+  <ng-container *ngFor="let propName of userProperties">
+    <mat-form-field appearance="outline">
+      <mat-label>{{ propName }}</mat-label>
+      <input matInput [formControlName]="propName" [placeholder]="propName" />
+    </mat-form-field>
+  </ng-container>
+
+  <button mat-flat-button color="primary" (click)="login()">Login</button>
+</form>

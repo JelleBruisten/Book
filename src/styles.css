@@ -13,3 +13,9 @@ body {
   margin: auto;
   max-width: 800px;
 }
+
+form {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}

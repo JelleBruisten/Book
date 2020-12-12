@@ -1,3 +1,7 @@
 button {
   margin-left: 20px;
 }
+
+button.login {
+  margin-left: auto;
+}

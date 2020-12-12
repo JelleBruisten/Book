@@ -1,5 +1,6 @@
-<h2>Add book</h2>
-<form [formGroup]="bookForm" *ngIf="bookForm">
+<form [formGroup]="bookForm" *ngIf="bookForm" class="mat-elevation-z6">
+  <h2>Add book</h2>
+
   <ng-container *ngFor="let propName of bookProperties">
     <mat-form-field appearance="outline">
       <mat-label>{{ propName }}</mat-label>

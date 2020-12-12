@@ -18,15 +18,14 @@ export class AuthenticationService {
     if (jwtToken) {
       this.jwtToken = jwtToken;
       this.loggedInSubject = new BehaviorSubject<boolean>(true);
-    }
-    else {
+    } else {
       this.jwtToken = undefined;
       this.loggedInSubject = new BehaviorSubject<boolean>(false);
     }
   }
 
   login(username: string, password: string) {
-    this.http.post(apiUrl, { username, password }).pipe(
+    return this.http.post(apiUrl, { username, password }).pipe(
       tap(
         (response: { access_token: string }) => {
           this.setToken(response.access_token);
@@ -43,7 +42,7 @@ export class AuthenticationService {
   }
 
   setToken(access_token: string) {
-    if(!this.loggedInSubject.value) {
+    if (!this.loggedInSubject.value) {
       this.loggedInSubject.next(true);
     }
     this.jwtToken = access_token;
@@ -55,7 +54,7 @@ export class AuthenticationService {
   }
 
   removeJwtToken() {
-    if(this.loggedInSubject.value) {
+    if (this.loggedInSubject.value) {
       this.loggedInSubject.next(false);
     }
     this.jwtToken = undefined;
