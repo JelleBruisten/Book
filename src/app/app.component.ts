@@ -9,10 +9,9 @@ import { AuthenticationService } from './authentication/services/authentication.
 })
 export class AppComponent {
   title = 'book';
-  loggedin$: Observable<boolean>;
+  loggedin$ = this.authenticationService.loggedIn$;
 
   constructor(private authenticationService: AuthenticationService) {
-    this.loggedin$ = this.authenticationService.loggedIn$;
   }
 
   logout() {

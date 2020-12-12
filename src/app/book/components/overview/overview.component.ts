@@ -18,13 +18,12 @@ export class OverviewComponent implements OnInit {
     'actions',
   ];
   books: Book[];
-  loggedin$: Observable<boolean>;
+  loggedin$ = this.authenticationService.loggedIn$;
 
   constructor(
     private authenticationService: AuthenticationService,
     private bookService: BookService
   ) {
-    this.loggedin$ = this.authenticationService.loggedIn$;
   }
 
   ngOnInit(): void {

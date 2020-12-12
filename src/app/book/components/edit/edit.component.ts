@@ -16,7 +16,7 @@ export class EditComponent implements OnInit {
   bookForm: FormGroup;
   isbn: string;
   book: Book;
-  loggedin$: Observable<boolean>;
+  loggedin$ = this.authenticationService.loggedIn$;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -25,7 +25,6 @@ export class EditComponent implements OnInit {
     private router: Router,
     private bookService: BookService
   ) {
-    this.loggedin$ = this.authenticationService.loggedIn$;
   }
 
   ngOnInit(): void {
@@ -56,8 +55,8 @@ export class EditComponent implements OnInit {
         formDefinition[p] = null;
       }
     }
-    this.bookForm = this.formBuilder.group(formDefinition);
 
+    this.bookForm = this.formBuilder.group(formDefinition);
     if (!this.authenticationService.loggedIn) {
       this.bookForm.disable();
     }
