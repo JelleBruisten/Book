@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { AuthenticationService } from 'src/app/authentication/services/authentication.service';
+import { AuthenticationService } from '../../../authentication/services/authentication.service';
 import { Book } from '../../book';
 import { BookService } from '../../services/book.service';
 
@@ -23,8 +22,7 @@ export class OverviewComponent implements OnInit {
   constructor(
     private authenticationService: AuthenticationService,
     private bookService: BookService
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.bookService

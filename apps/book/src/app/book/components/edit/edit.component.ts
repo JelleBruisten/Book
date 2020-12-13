@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { AuthenticationService } from 'src/app/authentication/services/authentication.service';
+import { AuthenticationService } from '../../../authentication/services/authentication.service';
 import { Book, bookProperties } from '../../book';
 import { BookService } from '../../services/book.service';
 
@@ -24,8 +23,7 @@ export class EditComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private bookService: BookService
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
