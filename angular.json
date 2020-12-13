@@ -19,7 +19,10 @@
             "polyfills": "apps/web/src/polyfills.ts",
             "tsConfig": "apps\\web\\tsconfig.app.json",
             "aot": true,
-            "assets": ["apps/web/src/favicon.ico", "apps/web/src/assets"],
+            "assets": [
+              "apps/web/src/favicon.ico",
+              "apps/web/src/assets"
+            ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "apps/web/src/styles.css"
@@ -54,7 +57,10 @@
                 }
               ]
             }
-          }
+          },
+          "outputs": [
+            "{options.outputPath}"
+          ]
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
@@ -80,13 +86,19 @@
             "polyfills": "apps/web/src/polyfills.ts",
             "tsConfig": "apps\\web\\tsconfig.spec.json",
             "karmaConfig": "apps\\web\\karma.conf.js",
-            "assets": ["apps/web/src/favicon.ico", "apps/web/src/assets"],
+            "assets": [
+              "apps/web/src/favicon.ico",
+              "apps/web/src/assets"
+            ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "apps/web/src/styles.css"
             ],
             "scripts": []
-          }
+          },
+          "outputs": [
+            "coverage/apps\\web"
+          ]
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
@@ -95,7 +107,9 @@
               "apps\\web\\tsconfig.app.json",
               "apps\\web\\tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         }
       }
@@ -120,7 +134,9 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "apps\\web-e2e\\tsconfig.json",
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         }
       }
@@ -135,9 +151,13 @@
           "builder": "@nrwl/linter:lint",
           "options": {
             "linter": "eslint",
-            "config": "libs/interfaces/.eslintrc",
-            "tsConfig": ["libs/interfaces/tsconfig.lib.json"],
-            "exclude": ["**/node_modules/**", "!libs/interfaces/**"]
+            "tsConfig": [
+              "libs/interfaces/tsconfig.lib.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/interfaces/**/*"
+            ]
           }
         }
       }
