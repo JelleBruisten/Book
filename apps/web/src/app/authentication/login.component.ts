@@ -2,9 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthenticationService } from './services/authentication.service';
-import { User } from '@book/interfaces';
-
-const userProperties = ['username', 'password'];
+import { User, userProperties } from '@book/interfaces';
 
 @Component({
   selector: 'app-login',
@@ -32,7 +30,7 @@ export class LoginComponent implements OnInit {
   login() {
     if (this.loginForm.valid) {
       const user: User = this.loginForm.value as User;
-      this.authenticationService.login(user.username, user.password).subscribe(
+      this.authenticationService.login(user).subscribe(
         () => {
           this.router.navigate(['/']);
         },

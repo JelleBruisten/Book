@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
+
+import { User } from '@book/interfaces';
 import { environment } from '../../../environments/environment';
 import { LOCAL_STORE_JWT_TOKEN_KEY } from '../constants';
 
@@ -25,19 +27,17 @@ export class AuthenticationService {
     }
   }
 
-  login(username: string, password: string) {
-    return this.http
-      .post<{ access_token: string }>(apiUrl, { username, password })
-      .pipe(
-        tap(
-          (response: { access_token: string }) => {
-            this.setToken(response.access_token);
-          },
-          () => {
-            this.removeJwtToken();
-          }
-        )
-      );
+  login(user: User) {
+    return this.http.post<{ access_token: string }>(apiUrl, user).pipe(
+      tap(
+        (response: { access_token: string }) => {
+          this.setToken(response.access_token);
+        },
+        () => {
+          this.removeJwtToken();
+        }
+      )
+    );
   }
 
   logout() {
