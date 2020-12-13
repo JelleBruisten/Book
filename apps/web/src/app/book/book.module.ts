@@ -11,6 +11,7 @@ import { BookRoutingModule } from './book-routing.module';
 import { OverviewComponent } from './components/overview/overview.component';
 import { AddComponent } from './components/add/add.component';
 import { EditComponent } from './components/edit/edit.component';
+import { BookStore } from './store/book.store';
 
 @NgModule({
   declarations: [OverviewComponent, AddComponent, EditComponent],

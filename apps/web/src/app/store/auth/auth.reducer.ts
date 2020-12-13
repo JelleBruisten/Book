@@ -37,7 +37,6 @@ const authReducerInternal = createReducer(
     authActions.loginSuccess,
     authActions.authHydrateSuccess,
     (state, { accessToken }) => {
-      console.log(accessToken);
       return {
         ...state,
         accessToken,

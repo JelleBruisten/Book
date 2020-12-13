@@ -35,7 +35,6 @@ export class BookService {
     return new Promise((resolve) => {
       const book = this.books.find((book) => Number(book.isbn) === bookIsbn);
       if (!book) {
-        console.log(this.books);
         throw new HttpException('Book does not exist!', 404);
       }
       resolve(book);
@@ -75,7 +74,6 @@ export class BookService {
         (book) => Number(book.isbn) === bookIsbn
       );
       if (index === -1) {
-        console.log(this.books);
         throw new HttpException('Book does not exist!', 404);
       }
       const books = [

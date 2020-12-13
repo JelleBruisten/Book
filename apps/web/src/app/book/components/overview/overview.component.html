@@ -1,4 +1,4 @@
-<table mat-table [dataSource]="books" class="mat-elevation-z8">
+<table mat-table [dataSource]="books$ | async" class="mat-elevation-z8">
   <!-- isbn Column -->
   <ng-container matColumnDef="isbn">
     <th mat-header-cell *matHeaderCellDef>ISBN.</th>

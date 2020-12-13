@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Book } from '@book/interfaces';
+import { ComponentStore } from '@ngrx/component-store';
 import { AuthFacade } from '../../../store/auth/auth.facade';
 import { BookService } from '../../services/book.service';
+import { BookStore } from '../../store/book.store';
 
 @Component({
   selector: 'app-overview',
   templateUrl: './overview.component.html',
   styleUrls: ['./overview.component.css'],
+  providers: [BookStore],
 })
 export class OverviewComponent implements OnInit {
   displayedColumns: string[] = [
@@ -16,32 +19,20 @@ export class OverviewComponent implements OnInit {
     'publish_date',
     'actions',
   ];
-  books: Book[];
-  loggedin$ = this.authFacade.authenticated$;
 
-  constructor(
-    private authFacade: AuthFacade,
-    private bookService: BookService
-  ) {}
+  books$ = this.bookStore.selectBooks;
+  loggedin$ = this.authFacade.authenticated$;
+  loading$ = this.bookStore.selectLoading;
+
+  constructor(private authFacade: AuthFacade, private bookStore: BookStore) {}
 
   ngOnInit(): void {
-    this.bookService
-      .getBooks()
-      .subscribe((books: Book[]) => (this.books = books));
+    this.bookStore.loadBooks();
   }
 
   deleteBook(book: Book) {
     if (confirm(`You sure u want to delete book "${book.title}"?`)) {
-      this.bookService.deleteBook(book).subscribe((message) => {
-        alert(message);
-        // deleted from api, lets delete it from our data source aswell now.
-        const index = this.books.indexOf(book);
-        const books = [
-          ...this.books.slice(0, index),
-          ...this.books.slice(index + 1),
-        ];
-        this.books = books;
-      });
+      this.bookStore.deleteBook(book);
     }
   }
 }
