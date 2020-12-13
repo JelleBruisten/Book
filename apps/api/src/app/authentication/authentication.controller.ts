@@ -1,3 +1,4 @@
+import { User } from '@book/interfaces';
 import { Controller, Post, Request, UseGuards } from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
 import { LocalAuthenticationGuard } from './local-authentication.guard';
@@ -10,7 +11,7 @@ export class AuthenticationController {
   @UseGuards(LocalAuthenticationGuard)
   @Public()
   @Post()
-  async login(@Request() req) {
+  async login(@Request() req: { user: User }) {
     return this.authenticationService.login(req.user);
   }
 }

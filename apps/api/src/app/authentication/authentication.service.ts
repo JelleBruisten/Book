@@ -1,3 +1,4 @@
+import { User } from '@book/interfaces';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
@@ -9,7 +10,10 @@ export class AuthenticationService {
     private jwtService: JwtService
   ) {}
 
-  async validateUser(username: string, passwordHash: string) {
+  async validateUser(
+    username: string,
+    passwordHash: string
+  ): Promise<Partial<User>> {
     const user = await this.userService.findUser(username);
     if (user && user.password === passwordHash) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -19,7 +23,7 @@ export class AuthenticationService {
     return null;
   }
 
-  async login(user: any) {
+  async login(user: User) {
     const payload = { username: user.username, sub: user.userId };
     return {
       access_token: this.jwtService.sign(payload),

@@ -5,7 +5,7 @@
     "package.json": "*",
     "tslint.json": "*",
     "nx.json": "*",
-    "tsconfig.base.json": "*"
+    "tsconfig.json": "*"
   },
   "projects": {
     "web": {

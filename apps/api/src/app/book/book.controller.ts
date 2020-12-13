@@ -1,3 +1,4 @@
+import { Book } from '@book/interfaces';
 import {
   Body,
   Controller,
@@ -9,7 +10,6 @@ import {
 } from '@nestjs/common';
 import { Public } from '../authentication/public.decorator';
 import { BookService } from './book.service';
-import { Book } from '@book/interfaces';
 
 @Controller('book')
 export class BookController {
@@ -17,32 +17,32 @@ export class BookController {
 
   @Public()
   @Get()
-  async getBooks() {
+  async getBooks(): Promise<Book[]> {
     const books = await this.bookService.getBooks();
     return books;
   }
 
   @Public()
   @Get(':isbn')
-  async getBook(@Param('isbn') isbn: string | number) {
+  async getBook(@Param('isbn') isbn: string | number): Promise<Book> {
     const book = await this.bookService.getBook(isbn);
     return book;
   }
 
   @Post()
-  async addBook(@Body() book: Book) {
+  async addBook(@Body() book: Book): Promise<boolean> {
     const result = await this.bookService.addBook(book);
     return result;
   }
 
   @Put()
-  async updateBook(@Body() book: Book) {
+  async updateBook(@Body() book: Book): Promise<boolean> {
     const result = await this.bookService.updateBook(book);
     return result;
   }
 
   @Delete(':isbn')
-  async deleteBook(@Param('isbn') isbn: string | number) {
+  async deleteBook(@Param('isbn') isbn: string | number): Promise<boolean> {
     const result = await this.bookService.deleteBook(isbn);
     return result;
   }
