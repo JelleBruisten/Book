@@ -1527,10 +1527,24 @@
     optional "0.1.4"
     tslib "2.0.3"
 
+"@ngrx/component-store@^10.1.0":
+  version "10.1.0"
+  resolved "https://registry.yarnpkg.com/@ngrx/component-store/-/component-store-10.1.0.tgz#b7e2930f5cd5088c17c0e3c8363f7af70667d26b"
+  integrity sha512-SQUgFnISD4N1BUQQiaWy/OjZEGOCnrl1MePm6skg7QOR5gO2zhoB/AjU33NmZ4MNkT7byyjiUq7I74Mw+Y8eSA==
+  dependencies:
+    tslib "^2.0.0"
+
 "@ngrx/effects@^10.1.0":
   version "10.1.0"
   resolved "https://registry.yarnpkg.com/@ngrx/effects/-/effects-10.1.0.tgz#14efeb684e1e4a005a40357812c1fdd3aabb8489"
   integrity sha512-KQfEZAgTu317/xLc2WL/Qqf/DAEsBBCZNcMubSiuOZr7Sja/syW8tdOfm+jtAOYt4ORg8XX0W8aI54bxyliFDA==
+  dependencies:
+    tslib "^2.0.0"
+
+"@ngrx/router-store@^10.1.0":
+  version "10.1.0"
+  resolved "https://registry.yarnpkg.com/@ngrx/router-store/-/router-store-10.1.0.tgz#e90a6e5279f0cc16de665ffdad67decd4052c416"
+  integrity sha512-NN0YMi0enwfvnqctbsE5Bs3GiTpHjrOPOFxAnPMq65+V3K0AGlqUxsO481lefTvvpMUeTDEV6KhxpmkkLT+KTA==
   dependencies:
     tslib "^2.0.0"
 
