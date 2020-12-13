@@ -16,6 +16,9 @@
     },
     "interfaces": {
       "tags": []
+    },
+    "api": {
+      "tags": []
     }
   },
   "tasksRunnerOptions": {
