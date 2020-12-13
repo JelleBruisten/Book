@@ -1,4 +1,4 @@
-import { Book } from '@book/interfaces';
+import type { Book } from '@book/interfaces';
 import {
   Body,
   Controller,
