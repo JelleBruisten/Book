@@ -1,5 +1,14 @@
 <form [formGroup]="loginForm" *ngIf="loginForm" class="mat-elevation-z6">
   <h2>Login</h2>
+
+  <span *ngIf="authFacade.loading$ | async">
+    Loading please wait..
+  </span>
+
+  <span *ngIf="authFacade.error$ | async" class="error">
+    Login failed
+  </span>
+
   <ng-container *ngFor="let propName of userProperties">
     <mat-form-field appearance="outline">
       <mat-label>{{ propName }}</mat-label>
@@ -7,5 +16,7 @@
     </mat-form-field>
   </ng-container>
 
-  <button mat-flat-button color="primary" (click)="login()">Login</button>
+
+
+  <button mat-flat-button color="primary" (click)="login()" [disabled]="authFacade.loading$ | async">Login</button>
 </form>

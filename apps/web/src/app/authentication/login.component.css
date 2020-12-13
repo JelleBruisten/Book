@@ -1,0 +1,7 @@
+span {
+  font-weight: 400;
+}
+
+span.error {
+  color: red;
+}

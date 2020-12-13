@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { bookProperties, Book } from '@book/interfaces';
 import { AuthenticationService } from '../../../authentication/services/authentication.service';
+import { AuthFacade } from '../../../store/auth/auth.facade';
 import { BookService } from '../../services/book.service';
 
 @Component({
@@ -15,10 +16,10 @@ export class EditComponent implements OnInit {
   bookForm: FormGroup;
   isbn: string;
   book: Book;
-  loggedin$ = this.authenticationService.loggedIn$;
+  loggedin$ = this.authFacade.authenticated$;
 
   constructor(
-    private authenticationService: AuthenticationService,
+    private authFacade: AuthFacade,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private router: Router,
@@ -55,9 +56,9 @@ export class EditComponent implements OnInit {
     }
 
     this.bookForm = this.formBuilder.group(formDefinition);
-    if (!this.authenticationService.loggedIn) {
-      this.bookForm.disable();
-    }
+    // if (!this.authenticationService.loggedIn) {
+    //   this.bookForm.disable();
+    // }
   }
 
   saveBook() {

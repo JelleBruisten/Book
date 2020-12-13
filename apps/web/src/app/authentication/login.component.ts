@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { AuthenticationService } from './services/authentication.service';
 import { User, userProperties } from '@book/interfaces';
+import { AuthFacade } from '../store/auth/auth.facade';
 
 @Component({
   selector: 'app-login',
@@ -14,12 +13,12 @@ export class LoginComponent implements OnInit {
   userProperties = userProperties;
 
   constructor(
-    private router: Router,
     private formBuilder: FormBuilder,
-    private authenticationService: AuthenticationService
+    public authFacade: AuthFacade
   ) {}
 
   ngOnInit(): void {
+    this.authFacade.clear();
     const formDefinition = {};
     for (const userProperty of userProperties) {
       formDefinition[userProperty] = [null, Validators.required];
@@ -30,12 +29,7 @@ export class LoginComponent implements OnInit {
   login() {
     if (this.loginForm.valid) {
       const user: User = this.loginForm.value as User;
-      this.authenticationService.login(user).subscribe(
-        () => {
-          this.router.navigate(['/']);
-        },
-        () => alert('Login unsuccessfull')
-      );
+      this.authFacade.login(user);
     }
   }
 }

@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Observable, timer } from 'rxjs';
 
 import { User } from '@book/interfaces';
 import { environment } from '../../../environments/environment';
-import { LOCAL_STORE_JWT_TOKEN_KEY } from '../constants';
+import { delay, first, switchMap, tap, throttleTime } from 'rxjs/operators';
+import { AuthFacade } from '../../store/auth/auth.facade';
 
 const apiUrl = environment.apiURL + '/authentication';
 
@@ -13,62 +13,49 @@ const apiUrl = environment.apiURL + '/authentication';
   providedIn: 'root',
 })
 export class AuthenticationService {
-  private jwtToken: string;
-  private loggedInSubject: BehaviorSubject<boolean>;
-
-  constructor(private http: HttpClient) {
-    const jwtToken = sessionStorage.getItem(LOCAL_STORE_JWT_TOKEN_KEY);
-    if (jwtToken) {
-      this.jwtToken = jwtToken;
-      this.loggedInSubject = new BehaviorSubject<boolean>(true);
-    } else {
-      this.jwtToken = undefined;
-      this.loggedInSubject = new BehaviorSubject<boolean>(false);
-    }
+  constructor(private http: HttpClient, private authFacade: AuthFacade) {
+    // const jwtToken = sessionStorage.getItem(LOCAL_STORE_JWT_TOKEN_KEY);
+    // if (jwtToken) {
+    //   this.jwtToken = jwtToken;
+    //   this.loggedInSubject = new BehaviorSubject<boolean>(true);
+    // } else {
+    //   this.jwtToken = undefined;
+    //   this.loggedInSubject = new BehaviorSubject<boolean>(false);
+    // }
   }
 
-  login(user: User) {
-    return this.http.post<{ access_token: string }>(apiUrl, user).pipe(
-      tap(
-        (response: { access_token: string }) => {
-          this.setToken(response.access_token);
-        },
-        () => {
-          this.removeJwtToken();
-        }
-      )
+  public login(user: Partial<User>): Observable<{ access_token: string }> {
+    return timer(2000).pipe(
+      first(),
+      switchMap(() => this.http.post<{ access_token: string }>(apiUrl, user))
     );
   }
 
-  logout() {
-    this.removeJwtToken();
-  }
+  // setToken(access_token: string) {
+  //   if (!this.loggedInSubject.value) {
+  //     this.loggedInSubject.next(true);
+  //   }
+  //   this.jwtToken = access_token;
+  //   sessionStorage.setItem(LOCAL_STORE_JWT_TOKEN_KEY, access_token);
+  // }
 
-  setToken(access_token: string) {
-    if (!this.loggedInSubject.value) {
-      this.loggedInSubject.next(true);
-    }
-    this.jwtToken = access_token;
-    sessionStorage.setItem(LOCAL_STORE_JWT_TOKEN_KEY, access_token);
-  }
+  // getJwtToken() {
+  //   return this.jwtToken;
+  // }
 
-  getJwtToken() {
-    return this.jwtToken;
-  }
+  // removeJwtToken() {
+  //   if (this.loggedInSubject.value) {
+  //     this.loggedInSubject.next(false);
+  //   }
+  //   this.jwtToken = undefined;
+  //   sessionStorage.removeItem(LOCAL_STORE_JWT_TOKEN_KEY);
+  // }
 
-  removeJwtToken() {
-    if (this.loggedInSubject.value) {
-      this.loggedInSubject.next(false);
-    }
-    this.jwtToken = undefined;
-    sessionStorage.removeItem(LOCAL_STORE_JWT_TOKEN_KEY);
-  }
+  // get loggedIn() {
+  //   return this.loggedInSubject.value;
+  // }
 
-  get loggedIn() {
-    return this.loggedInSubject.value;
-  }
-
-  get loggedIn$() {
-    return this.loggedInSubject.asObservable();
-  }
+  // get loggedIn$() {
+  //   return this.loggedInSubject.asObservable();
+  // }
 }

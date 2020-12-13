@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AuthenticationService } from './authentication/services/authentication.service';
+import { AuthFacade } from './store/auth/auth.facade';
 
 @Component({
   selector: 'app-root',
@@ -9,11 +10,11 @@ import { AuthenticationService } from './authentication/services/authentication.
 })
 export class AppComponent {
   title = 'book';
-  loggedin$ = this.authenticationService.loggedIn$;
+  loggedin$ = this.authFacade.authenticated$;
 
-  constructor(private authenticationService: AuthenticationService) {}
+  constructor(private authFacade: AuthFacade) {}
 
   logout() {
-    this.authenticationService.logout();
+    this.authFacade.logout();
   }
 }

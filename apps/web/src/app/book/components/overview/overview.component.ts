@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Book } from '@book/interfaces';
-import { AuthenticationService } from '../../../authentication/services/authentication.service';
+import { AuthFacade } from '../../../store/auth/auth.facade';
 import { BookService } from '../../services/book.service';
 
 @Component({
@@ -17,10 +17,10 @@ export class OverviewComponent implements OnInit {
     'actions',
   ];
   books: Book[];
-  loggedin$ = this.authenticationService.loggedIn$;
+  loggedin$ = this.authFacade.authenticated$;
 
   constructor(
-    private authenticationService: AuthenticationService,
+    private authFacade: AuthFacade,
     private bookService: BookService
   ) {}
 
