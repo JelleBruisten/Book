@@ -2,11 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthenticationService } from './services/authentication.service';
-
-interface User {
-  username: string;
-  password: string;
-}
+import { User } from '@book/interfaces';
 
 const userProperties = ['username', 'password'];
 
@@ -16,11 +12,14 @@ const userProperties = ['username', 'password'];
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
-
   loginForm: FormGroup;
   userProperties = userProperties;
 
-  constructor(private router: Router, private formBuilder: FormBuilder, private authenticationService: AuthenticationService) {}
+  constructor(
+    private router: Router,
+    private formBuilder: FormBuilder,
+    private authenticationService: AuthenticationService
+  ) {}
 
   ngOnInit(): void {
     const formDefinition = {};
@@ -31,13 +30,13 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    if(this.loginForm.valid) {
+    if (this.loginForm.valid) {
       const user: User = this.loginForm.value as User;
       this.authenticationService.login(user.username, user.password).subscribe(
         () => {
           this.router.navigate(['/']);
         },
-        () => alert("Login unsuccessfull")
+        () => alert('Login unsuccessfull')
       );
     }
   }

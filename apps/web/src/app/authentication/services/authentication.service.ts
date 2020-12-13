@@ -2,9 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 import { LOCAL_STORE_JWT_TOKEN_KEY } from '../constants';
 
-const apiUrl = 'http://localhost:3000/authentication';
+const apiUrl = environment.apiURL + '/authentication';
 
 @Injectable({
   providedIn: 'root',
@@ -25,16 +26,18 @@ export class AuthenticationService {
   }
 
   login(username: string, password: string) {
-    return this.http.post(apiUrl, { username, password }).pipe(
-      tap(
-        (response: { access_token: string }) => {
-          this.setToken(response.access_token);
-        },
-        () => {
-          this.removeJwtToken();
-        }
-      )
-    );
+    return this.http
+      .post<{ access_token: string }>(apiUrl, { username, password })
+      .pipe(
+        tap(
+          (response: { access_token: string }) => {
+            this.setToken(response.access_token);
+          },
+          () => {
+            this.removeJwtToken();
+          }
+        )
+      );
   }
 
   logout() {
