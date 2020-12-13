@@ -33,14 +33,19 @@ const authReducerInternal = createReducer(
   }),
 
   // on success loading becomes false, and we set accessToken and isLoggedIn
-  on(authActions.loginSuccess, (state, { accessToken }) => {
-    return {
-      ...state,
-      accessToken,
-      isLoggedIn: true,
-      loading: false,
-    };
-  }),
+  on(
+    authActions.loginSuccess,
+    authActions.authHydrateSuccess,
+    (state, { accessToken }) => {
+      console.log(accessToken);
+      return {
+        ...state,
+        accessToken,
+        isLoggedIn: true,
+        loading: false,
+      };
+    }
+  ),
 
   // on failure to login, we set loading to false, and error to true
   on(authActions.loginFailure, (state, {}) => {

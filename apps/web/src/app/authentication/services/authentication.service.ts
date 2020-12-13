@@ -24,10 +24,10 @@ export class AuthenticationService {
     // }
   }
 
-  login(user: Partial<User>): Observable<{ access_token: string }> {
+  login(user: Partial<User>): Observable<{ accessToken: string }> {
     return timer(2000).pipe(
       first(),
-      switchMap(() => this.http.post<{ access_token: string }>(apiUrl, user))
+      switchMap(() => this.http.post<{ accessToken: string }>(apiUrl, user))
     );
   }
 
@@ -35,12 +35,12 @@ export class AuthenticationService {
     return of();
   }
 
-  // setToken(access_token: string) {
+  // setToken(accessToken: string) {
   //   if (!this.loggedInSubject.value) {
   //     this.loggedInSubject.next(true);
   //   }
-  //   this.jwtToken = access_token;
-  //   sessionStorage.setItem(LOCAL_STORE_JWT_TOKEN_KEY, access_token);
+  //   this.jwtToken = accessToken;
+  //   sessionStorage.setItem(LOCAL_STORE_JWT_TOKEN_KEY, accessToken);
   // }
 
   // getJwtToken() {
