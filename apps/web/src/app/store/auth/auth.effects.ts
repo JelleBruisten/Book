@@ -20,22 +20,18 @@ export class AuthEffects {
       ofType(AuthActions.login),
       tap((a) => console.log(a)),
       switchMap((user: Partial<User>) =>
-        this.authService
-          .login({
-            username: user.username,
-            password: user.password,
-          })
-          .pipe(
-            tap((a) => console.log(a)),
-            map((response) =>
-              AuthActions.loginSuccess({
-                accessToken: response.access_token,
-                isLoggedIn: true,
-              })
-            ),
-            catchError(() => of(AuthActions.loginFailure()))
-          )
-      )
+        this.authService.login({
+          username: user.username,
+          password: user.password,
+        })
+      ),
+      map((response) =>
+        AuthActions.loginSuccess({
+          accessToken: response.access_token,
+          isLoggedIn: true,
+        })
+      ),
+      catchError(() => of(AuthActions.loginFailure()))
     )
   );
 
