@@ -15,7 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
   ],
 })
 export class AuthenticationModule {}

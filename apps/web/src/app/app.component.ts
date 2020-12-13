@@ -11,8 +11,7 @@ export class AppComponent {
   title = 'book';
   loggedin$ = this.authenticationService.loggedIn$;
 
-  constructor(private authenticationService: AuthenticationService) {
-  }
+  constructor(private authenticationService: AuthenticationService) {}
 
   logout() {
     this.authenticationService.logout();
