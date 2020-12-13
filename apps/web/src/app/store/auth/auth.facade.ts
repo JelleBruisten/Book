@@ -2,9 +2,11 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 import { User } from '@book/interfaces';
-import { AuthState } from './auth.reducer';
+import { AuthState } from '.';
 import * as AuthSelectors from './auth.selectors';
 import * as AuthActions from './auth.actions';
+
+export { AuthState } from './auth.reducer';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +18,7 @@ export class AuthFacade {
   readonly accessToken$ = this.store.select(AuthSelectors.selectAccessToken);
   readonly error$ = this.store.select(AuthSelectors.selectError);
   readonly loading$ = this.store.select(AuthSelectors.selectLoading);
+  readonly auth$ = this.store.select(AuthSelectors.selectAll);
 
   constructor(private store: Store<AuthState>) {}
 

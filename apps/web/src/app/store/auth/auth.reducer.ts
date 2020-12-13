@@ -23,6 +23,7 @@ export const initialAuthState: AuthState = {
 const authReducerInternal = createReducer(
   initialAuthState,
 
+  // on login set loading to true, and error to false
   on(authActions.login, (state, {}) => {
     return {
       ...state,
@@ -31,15 +32,17 @@ const authReducerInternal = createReducer(
     };
   }),
 
-  on(authActions.loginSuccess, (state, { accessToken, isLoggedIn }) => {
+  // on success loading becomes false, and we set accessToken and isLoggedIn
+  on(authActions.loginSuccess, (state, { accessToken }) => {
     return {
       ...state,
       accessToken,
-      isLoggedIn,
+      isLoggedIn: true,
       loading: false,
     };
   }),
 
+  // on failure to login, we set loading to false, and error to true
   on(authActions.loginFailure, (state, {}) => {
     return {
       ...state,
@@ -48,6 +51,7 @@ const authReducerInternal = createReducer(
     };
   }),
 
+  // on a loginClear we reset the loading and error to false
   on(authActions.loginClear, (state, {}) => {
     return {
       ...state,
@@ -56,6 +60,7 @@ const authReducerInternal = createReducer(
     };
   }),
 
+  // on logging out we remove the accessToken and set isLoggedIn to false
   on(authActions.logout, (state, {}) => {
     return {
       ...state,

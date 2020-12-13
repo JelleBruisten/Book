@@ -22,3 +22,8 @@ export const selectLoading = createSelector(
   getAuthFeatureState,
   (state: AuthState) => state.loading
 );
+
+export const selectAll = createSelector(
+  getAuthFeatureState,
+  (state: AuthState) => state
+);

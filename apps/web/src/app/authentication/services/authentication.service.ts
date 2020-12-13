@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, timer } from 'rxjs';
+import { Observable, of, timer } from 'rxjs';
 
 import { User } from '@book/interfaces';
 import { environment } from '../../../environments/environment';
@@ -24,11 +24,15 @@ export class AuthenticationService {
     // }
   }
 
-  public login(user: Partial<User>): Observable<{ access_token: string }> {
+  login(user: Partial<User>): Observable<{ access_token: string }> {
     return timer(2000).pipe(
       first(),
       switchMap(() => this.http.post<{ access_token: string }>(apiUrl, user))
     );
+  }
+
+  logout(): Observable<void> {
+    return of();
   }
 
   // setToken(access_token: string) {
