@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Book } from '../book';
+import { Book } from '@book/interfaces';
 
 const apiUrl = 'http://localhost:3000/book';
 
@@ -19,15 +19,15 @@ export class BookService {
     return this.http.get<Book>(`${apiUrl}/${isbn}`);
   }
 
-  addBook(book: Book): Observable<any> {
+  addBook(book: Book): Observable<unknown> {
     return this.http.post(`${apiUrl}`, book);
   }
 
-  updateBook(book: Book): Observable<any> {
+  updateBook(book: Book): Observable<unknown> {
     return this.http.put(`${apiUrl}`, book);
   }
 
-  deleteBook(book: Book): Observable<any> {
+  deleteBook(book: Book): Observable<unknown> {
     return this.http.delete(`${apiUrl}/${book.isbn}`);
   }
 }

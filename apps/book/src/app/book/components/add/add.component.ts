@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-
-import { Book, bookProperties } from '../../book';
+import { bookProperties, Book } from '@book/interfaces';
 import { BookService } from '../../services/book.service';
 
 @Component({

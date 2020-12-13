@@ -13,6 +13,9 @@
     },
     "book-e2e": {
       "tags": []
+    },
+    "interfaces": {
+      "tags": []
     }
   }
 }

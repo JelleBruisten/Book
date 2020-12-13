@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { bookProperties, Book } from '@book/interfaces';
 import { AuthenticationService } from '../../../authentication/services/authentication.service';
-import { Book, bookProperties } from '../../book';
 import { BookService } from '../../services/book.service';
 
 @Component({

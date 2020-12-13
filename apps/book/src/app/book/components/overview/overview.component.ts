@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Book } from '@book/interfaces';
 import { AuthenticationService } from '../../../authentication/services/authentication.service';
-import { Book } from '../../book';
 import { BookService } from '../../services/book.service';
 
 @Component({
