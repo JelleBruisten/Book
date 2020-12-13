@@ -3,26 +3,26 @@
   "version": 1,
   "newProjectRoot": "",
   "projects": {
-    "book": {
+    "web": {
       "projectType": "application",
       "schematics": {},
-      "root": "apps\\book",
-      "sourceRoot": "apps\\book\\src",
+      "root": "apps\\web",
+      "sourceRoot": "apps\\web\\src",
       "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist\\apps\\book",
-            "index": "apps/book/src/index.html",
-            "main": "apps/book/src/main.ts",
-            "polyfills": "apps/book/src/polyfills.ts",
-            "tsConfig": "apps\\book\\tsconfig.app.json",
+            "outputPath": "dist\\apps\\web",
+            "index": "apps/web/src/index.html",
+            "main": "apps/web/src/main.ts",
+            "polyfills": "apps/web/src/polyfills.ts",
+            "tsConfig": "apps\\web\\tsconfig.app.json",
             "aot": true,
-            "assets": ["apps/book/src/favicon.ico", "apps/book/src/assets"],
+            "assets": ["apps/web/src/favicon.ico", "apps/web/src/assets"],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-              "apps/book/src/styles.css"
+              "apps/web/src/styles.css"
             ],
             "scripts": []
           },
@@ -30,8 +30,8 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "apps/book/src/environments/environment.ts",
-                  "with": "apps/book/src/environments/environment.prod.ts"
+                  "replace": "apps/web/src/environments/environment.ts",
+                  "with": "apps/web/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -59,31 +59,31 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "book:build"
+            "browserTarget": "web:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "book:build:production"
+              "browserTarget": "web:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "book:build"
+            "browserTarget": "web:build"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "apps/book/src/test.ts",
-            "polyfills": "apps/book/src/polyfills.ts",
-            "tsConfig": "apps\\book\\tsconfig.spec.json",
-            "karmaConfig": "apps\\book\\karma.conf.js",
-            "assets": ["apps/book/src/favicon.ico", "apps/book/src/assets"],
+            "main": "apps/web/src/test.ts",
+            "polyfills": "apps/web/src/polyfills.ts",
+            "tsConfig": "apps\\web\\tsconfig.spec.json",
+            "karmaConfig": "apps\\web\\karma.conf.js",
+            "assets": ["apps/web/src/favicon.ico", "apps/web/src/assets"],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-              "apps/book/src/styles.css"
+              "apps/web/src/styles.css"
             ],
             "scripts": []
           }
@@ -92,34 +92,34 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "apps\\book\\tsconfig.app.json",
-              "apps\\book\\tsconfig.spec.json"
+              "apps\\web\\tsconfig.app.json",
+              "apps\\web\\tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**"]
           }
         }
       }
     },
-    "book-e2e": {
+    "web-e2e": {
       "projectType": "application",
-      "root": "apps\\book-e2e",
+      "root": "apps\\web-e2e",
       "architect": {
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
-            "protractorConfig": "apps\\book-e2e\\protractor.conf.js",
-            "devServerTarget": "book:serve"
+            "protractorConfig": "apps\\web-e2e\\protractor.conf.js",
+            "devServerTarget": "web:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "book:serve:production"
+              "devServerTarget": "web:serve:production"
             }
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": "apps\\book-e2e\\tsconfig.json",
+            "tsConfig": "apps\\web-e2e\\tsconfig.json",
             "exclude": ["**/node_modules/**"]
           }
         }
@@ -143,7 +143,7 @@
       }
     }
   },
-  "defaultProject": "book",
+  "defaultProject": "web",
   "cli": {
     "defaultCollection": "@ngrx/schematics"
   }
