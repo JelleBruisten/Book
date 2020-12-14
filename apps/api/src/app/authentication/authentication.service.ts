@@ -23,10 +23,37 @@ export class AuthenticationService {
     return null;
   }
 
-  async login(user: User) {
-    const payload = { username: user.username, sub: user.userId };
+  async login(user: User) {    
     return {
-      accessToken: this.jwtService.sign(payload),
+      accessToken: this.createAccessToken(user),
+      refreshToken: await this.createRefreshToken(user)
     };
+  }
+
+  async refresh(token: string) {
+    const tokenData = this.jwtService.decode(token) as { userId: string | number};
+    if(tokenData.userId) {
+      const user = await this.userService.findUserById(tokenData.userId);
+      return {
+        accessToken: this.createAccessToken(user)
+      };
+    }
+    return false;
+  }
+
+  createAccessToken(user: User) {
+    const payload = { username: user.username, sub: user.userId };
+    return this.jwtService.sign(payload, {
+      expiresIn: '15m'
+    });
+  }
+
+  async createRefreshToken(user: User) {
+    const payload = { username: user.username, sub: user.userId };
+    const token = this.jwtService.sign(payload, {
+      expiresIn: '6h'
+    });    
+    await this.userService.setToken(user.userId, token);    
+    return token;
   }
 }

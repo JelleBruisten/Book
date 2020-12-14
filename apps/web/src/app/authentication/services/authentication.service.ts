@@ -24,10 +24,10 @@ export class AuthenticationService {
     // }
   }
 
-  login(user: Partial<User>): Observable<{ accessToken: string }> {
+  login(user: Partial<User>): Observable<{ accessToken: string, refreshToken: string }> {
     return timer(2000).pipe(
       first(),
-      switchMap(() => this.http.post<{ accessToken: string }>(apiUrl, user))
+      switchMap(() => this.http.post<{ accessToken: string, refreshToken: string }>(apiUrl, user))
     );
   }
 

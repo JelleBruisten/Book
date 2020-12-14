@@ -28,10 +28,12 @@ export class AuthEffects implements OnInitEffects {
       ofType(AuthActions.authHydrate),
       map(() => {
         const storageValue = sessionStorage.getItem(sessionStorageJwtKey);
-        if (storageValue) {
+        const storageValue2 = localStorage.getItem(sessionStorageJwtKey);
+        if (storageValue && storageValue2) {
           try {
             return AuthActions.authHydrateSuccess({
               accessToken: JSON.parse(storageValue),
+              refreshToken: JSON.parse(storageValue2),
             });
           } catch {
             return AuthActions.authHydrateFailure();
@@ -49,6 +51,7 @@ export class AuthEffects implements OnInitEffects {
         ofType(AuthActions.authHydrateFailure, AuthActions.logout),
         tap(() => {
           sessionStorage.removeItem(sessionStorageJwtKey);
+          localStorage.removeItem(sessionStorageJwtKey);
         })
       ),
     {
@@ -67,9 +70,10 @@ export class AuthEffects implements OnInitEffects {
             password: user.password,
           })
           .pipe(
-            map((response: { accessToken: string }) =>
+            map((response: { accessToken: string, refreshToken: string }) =>
               AuthActions.loginSuccess({
                 accessToken: response.accessToken,
+                refreshToken: response.refreshToken
               })
             ),
             catchError(() => of(AuthActions.loginFailure()))
@@ -83,11 +87,15 @@ export class AuthEffects implements OnInitEffects {
     () =>
       this.actions$.pipe(
         ofType(AuthActions.loginSuccess),
-        tap((props: { accessToken: string }) => {
+        tap((props: { accessToken: string, refreshToken: string }) => {
           sessionStorage.setItem(
             sessionStorageJwtKey,
             JSON.stringify(props.accessToken)
           );
+          localStorage.setItem(
+            sessionStorageJwtKey,
+            JSON.stringify(props.refreshToken)
+          );          
           this.router.navigate(['/']);
         })
       ),

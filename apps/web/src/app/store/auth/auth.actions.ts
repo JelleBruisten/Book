@@ -5,7 +5,7 @@ import { createAction, props } from '@ngrx/store';
 export const authHydrate = createAction('[Auth] hydrate');
 export const authHydrateSuccess = createAction(
   '[Auth] hydrateSuccess',
-  props<{ accessToken: string }>()
+  props<{ accessToken: string, refreshToken: string }>()
 );
 export const authHydrateFailure = createAction('[Auth] hydrateFailure');
 
@@ -14,7 +14,7 @@ export const login = createAction('[Auth] login', props<User>());
 
 export const loginSuccess = createAction(
   '[Auth] loginSuccess',
-  props<{ accessToken: string }>()
+  props<{ accessToken: string, refreshToken: string }>()
 );
 export const loginFailure = createAction('[Auth] loginFailure');
 export const loginClear = createAction('[Auth] loginClear');

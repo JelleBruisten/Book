@@ -36,10 +36,11 @@ const authReducerInternal = createReducer(
   on(
     authActions.loginSuccess,
     authActions.authHydrateSuccess,
-    (state, { accessToken }) => {
+    (state, { accessToken, refreshToken }) => {
       return {
         ...state,
         accessToken,
+        refreshToken,
         isLoggedIn: true,
         loading: false,
       };
