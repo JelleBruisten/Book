@@ -1,48 +1,74 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { bookProperties, Book } from '@book/interfaces';
-import { AuthenticationService } from '../../../authentication/services/authentication.service';
+import { Subject } from 'rxjs';
+import { filter, takeUntil } from 'rxjs/operators';
 import { AuthFacade } from '../../../store/auth/auth.facade';
-import { BookService } from '../../services/book.service';
+import { BookStore } from '../../store/book.store';
 
 @Component({
   selector: 'app-edit',
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.css'],
+  providers: [BookStore],
 })
-export class EditComponent implements OnInit {
+export class EditComponent implements OnInit, OnDestroy {
   bookProperties = bookProperties;
   bookForm: FormGroup;
-  isbn: string;
-  book: Book;
   loggedin$ = this.authFacade.authenticated$;
+  loading$ = this.bookStore.selectLoading;
+  _destroyed$ = new Subject<void>();
 
   constructor(
     private authFacade: AuthFacade,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private router: Router,
-    private bookService: BookService
+    private bookStore: BookStore
   ) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
       if (params.has('isbn')) {
-        this.isbn = params.get('isbn');
-        this.bookService.getBook(this.isbn).subscribe(
-          (book: Book) => {
-            this.createForm(book);
-            this.book = book;
-          },
-          () => {
-            this.router.navigate(['../../'], { relativeTo: this.route });
-          }
-        );
+        const isbn = params.get('isbn');
+        this.bookStore.getBook(isbn);
       } else {
         this.router.navigate(['../'], { relativeTo: this.route });
       }
     });
+
+    // loading success
+    this.bookStore.selectBook
+      .pipe(
+        takeUntil(this._destroyed$),
+        filter((a) => !!a)
+      )
+      .subscribe((book: Book) => {
+        this.createForm(book);
+      });
+
+    // loading error
+    this.bookStore.selectErrorLoading
+      .pipe(takeUntil(this._destroyed$))
+      .subscribe(() => {
+        this.router.navigate(['../../'], { relativeTo: this.route });
+      });
+
+    // saving success
+    this.bookStore.selectSaved
+      .pipe(takeUntil(this._destroyed$))
+      .subscribe(() => {
+        alert('saved');
+        this.router.navigate(['../../'], { relativeTo: this.route });
+      });
+
+    // saving error
+    this.bookStore.selectErrorSaving
+      .pipe(takeUntil(this._destroyed$))
+      .subscribe(() => {
+        alert('error saving, please try again');
+      });
   }
 
   createForm(book: Book) {
@@ -54,18 +80,17 @@ export class EditComponent implements OnInit {
         formDefinition[p] = null;
       }
     }
-
     this.bookForm = this.formBuilder.group(formDefinition);
-    // if (!this.authenticationService.loggedIn) {
-    //   this.bookForm.disable();
-    // }
   }
 
   saveBook() {
-    this.bookService
-      .updateBook({ ...this.book, ...(this.bookForm.value as Book) })
-      .subscribe(() => {
-        this.router.navigate(['../'], { relativeTo: this.route });
-      });
+    this.bookStore.updateBook(this.bookForm.value as Book);
+  }
+
+  ngOnDestroy(): void {
+    if (this._destroyed$) {
+      this._destroyed$.next();
+      this._destroyed$.complete();
+    }
   }
 }

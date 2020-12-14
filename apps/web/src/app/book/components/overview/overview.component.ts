@@ -1,15 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Book } from '@book/interfaces';
-import { ComponentStore } from '@ngrx/component-store';
 import { AuthFacade } from '../../../store/auth/auth.facade';
-import { BookService } from '../../services/book.service';
-import { BookStore } from '../../store/book.store';
+import { BookListStore } from '../../store/bookList.store';
 
 @Component({
   selector: 'app-overview',
   templateUrl: './overview.component.html',
   styleUrls: ['./overview.component.css'],
-  providers: [BookStore],
+  providers: [BookListStore],
 })
 export class OverviewComponent implements OnInit {
   displayedColumns: string[] = [
@@ -24,7 +22,10 @@ export class OverviewComponent implements OnInit {
   loggedin$ = this.authFacade.authenticated$;
   loading$ = this.bookStore.selectLoading;
 
-  constructor(private authFacade: AuthFacade, private bookStore: BookStore) {}
+  constructor(
+    private authFacade: AuthFacade,
+    private bookStore: BookListStore
+  ) {}
 
   ngOnInit(): void {
     this.bookStore.loadBooks();

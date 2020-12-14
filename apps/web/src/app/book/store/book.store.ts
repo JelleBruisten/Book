@@ -2,49 +2,70 @@ import { Injectable } from '@angular/core';
 import { Book } from '@book/interfaces';
 import { ComponentStore } from '@ngrx/component-store';
 import { Observable, of } from 'rxjs';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import {
+  catchError,
+  distinctUntilChanged,
+  filter,
+  map,
+  switchMap,
+  tap,
+} from 'rxjs/operators';
 import { BookService } from '../services/book.service';
 
 export interface bookState {
-  books: Book[];
+  book: Book;
   loading: boolean;
-  error: boolean;
+  errorLoading: boolean;
+  errorSaving: boolean;
+  saved: boolean;
 }
 
-const initialBookListState = {
-  books: [],
+const initialBookState = {
+  book: null,
   loading: false,
-  error: false,
+  errorSaving: false,
+  errorLoading: false,
+  saved: false,
 };
+
+const filterNonTruthy = filter((a) => !!a);
 
 @Injectable()
 export class BookStore extends ComponentStore<bookState> {
+  constructor(private bookService: BookService) {
+    super(initialBookState);
+  }
+
   /**
    * Selectors
    */
-  readonly selectBooks = this.select((state) => {
-    return state.books;
+  readonly selectBook = this.select((state) => {
+    return state.book;
   });
 
   readonly selectLoading = this.select((state) => {
     return state.loading;
-  });
+  }).pipe(distinctUntilChanged(), filterNonTruthy);
 
-  readonly selectErrors = this.select((state) => {
-    return state.error;
-  });
+  readonly selectErrorSaving = this.select((state) => {
+    return state.errorSaving;
+  }).pipe(distinctUntilChanged(), filterNonTruthy);
 
-  constructor(private bookService: BookService) {
-    super(initialBookListState);
-  }
+  readonly selectErrorLoading = this.select((state) => {
+    return state.errorLoading;
+  }).pipe(distinctUntilChanged(), filterNonTruthy);
+
+  readonly selectSaved = this.select((state) => {
+    return state.saved;
+  }).pipe(distinctUntilChanged(), filterNonTruthy);
 
   /**
    * Updaters
    */
-  readonly setBooks = this.updater((state: bookState, books: Book[]) => {
+  readonly setBook = this.updater((state: bookState, book: Book) => {
     return {
       ...state,
-      books: books,
+      book: book,
     };
   });
 
@@ -66,39 +87,26 @@ export class BookStore extends ComponentStore<bookState> {
     }
   );
 
+  readonly setSaved = this.updater(
+    (state: bookState, newSaveState: boolean) => {
+      return {
+        ...state,
+        saved: newSaveState,
+      };
+    }
+  );
+
   /**
    * effects
    */
-  readonly loadBooks = this.effect((origin$: Observable<void>) =>
+  readonly getBook = this.effect((origin$: Observable<string>) =>
     origin$.pipe(
       tap(() => {
         this.setError(false);
         this.setLoading(true);
       }),
-      switchMap(() => {
-        return this.bookService.getBooks().pipe(
-          catchError((e) => {
-            this.setError(true);
-            return of(e);
-          })
-        );
-      }),
-      tap((books: Book[]) => {
-        this.setLoading(false);
-        this.setBooks(books);
-      })
-    )
-  );
-
-  readonly deleteBook = this.effect((origin$: Observable<Book>) =>
-    origin$.pipe(
-      tap(() => {
-        this.setError(false);
-        this.setLoading(true);
-      }),
-      switchMap((book: Book) => {
-        return this.bookService.deleteBook(book).pipe(
-          map(() => book),
+      switchMap((isbn: string) => {
+        return this.bookService.getBook(isbn).pipe(
           catchError((e) => {
             this.setError(true);
             return of(e);
@@ -107,13 +115,49 @@ export class BookStore extends ComponentStore<bookState> {
       }),
       tap((book: Book) => {
         this.setLoading(false);
-        const currentBooks = this.get().books;
-        const index = currentBooks.indexOf(book);
-        const nextBooks = [
-          ...currentBooks.slice(0, index),
-          ...currentBooks.slice(index + 1),
-        ];
-        this.setBooks(nextBooks);
+        this.setBook(book);
+      })
+    )
+  );
+
+  readonly addBook = this.effect((origin$: Observable<Book>) =>
+    origin$.pipe(
+      tap(() => {
+        this.setError(false);
+        this.setLoading(true);
+      }),
+      switchMap((book: Book) => {
+        return this.bookService.addBook(book).pipe(
+          catchError((e) => {
+            this.setError(true);
+            return of(e);
+          })
+        );
+      }),
+      tap(() => {
+        this.setLoading(false);
+        this.setSaved(true);
+      })
+    )
+  );
+
+  readonly updateBook = this.effect((origin$: Observable<Book>) =>
+    origin$.pipe(
+      tap(() => {
+        this.setError(false);
+        this.setLoading(true);
+      }),
+      switchMap((book: Book) => {
+        return this.bookService.updateBook(book).pipe(
+          catchError((e) => {
+            this.setError(true);
+            return of(e);
+          })
+        );
+      }),
+      tap(() => {
+        this.setLoading(false);
+        this.setSaved(true);
       })
     )
   );
