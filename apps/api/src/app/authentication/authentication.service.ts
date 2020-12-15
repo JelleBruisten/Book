@@ -1,5 +1,5 @@
 import { User } from '@book/interfaces';
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
 
@@ -10,7 +10,7 @@ export class AuthenticationService {
     private jwtService: JwtService
   ) {}
 
-  async validateUser(username: string,passwordHash: string): Promise<Partial<User>> {
+  async validateUser(username: string, passwordHash: string): Promise<Partial<User>> {
     const user = await this.userService.findUser(username);
     if (user && user.password === passwordHash) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -45,7 +45,7 @@ export class AuthenticationService {
   }
 
   createAccessToken(user: User) {
-    const expires = Date.now() + 1 * 60 * 1000;
+    const expires = Date.now() + 1 * 30 * 1000;
     const payload = {
       username: user.username,
       sub: user.userId,

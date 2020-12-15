@@ -35,7 +35,7 @@ export class AuthenticationService {
     return of();
   }
 
-  refresh(refreshToken: string) {
+  refreshAccessToken(refreshToken: string) {
     return this.http.put<{ accessToken: string }>(apiUrl, {
       refreshToken
     });

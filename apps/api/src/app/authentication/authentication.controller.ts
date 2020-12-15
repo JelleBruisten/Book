@@ -1,5 +1,5 @@
 import { User } from '@book/interfaces';
-import { Controller, Post, Request, UseGuards } from '@nestjs/common';
+import { Controller, Post, Put, Request, UseGuards } from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
 import { LocalAuthenticationGuard } from './local-authentication.guard';
 import { Public } from './public.decorator';
@@ -16,7 +16,7 @@ export class AuthenticationController {
   }
 
   @Public()
-  @Post()
+  @Put()
   async refresh(@Request() req: { refreshToken: string }) {
     return this.authenticationService.refresh(req.refreshToken);
   }

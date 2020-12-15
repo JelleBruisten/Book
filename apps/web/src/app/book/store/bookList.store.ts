@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Book } from '@book/interfaces';
 import { ComponentStore } from '@ngrx/component-store';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { BookService } from '../services/book.service';
 
@@ -79,7 +79,7 @@ export class BookListStore extends ComponentStore<bookListState> {
         return this.bookService.getBooks().pipe(
           catchError((e) => {
             this.setError(true);
-            return of(e);
+            return throwError(e);
           })
         );
       }),
@@ -101,7 +101,7 @@ export class BookListStore extends ComponentStore<bookListState> {
           map(() => book),
           catchError((e) => {
             this.setError(true);
-            return of(e);
+            return throwError(e);
           })
         );
       }),

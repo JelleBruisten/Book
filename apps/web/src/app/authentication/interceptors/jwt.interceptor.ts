@@ -1,34 +1,28 @@
 import { Injectable } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor} from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse} from '@angular/common/http';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { catchError, filter, switchMap, take } from 'rxjs/operators';
 import { AuthFacade, AuthState } from '../../store/auth/auth.facade';
+import { AuthenticationService } from '../services/authentication.service';
+import { JwtUtil } from '../util/jwt.util';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
-  private jwtToken = {
-    accessToken: '',
-    refreshToken: '',
-  };
+  private refreshingInProgress: boolean;
+  private accessTokenSubject: BehaviorSubject<string> = new BehaviorSubject<string>(
+    null
+  );
+  auth: AuthState;
 
-  constructor(
-    private authFacade: AuthFacade
-  ) {
+  constructor(private authFacade: AuthFacade, private authenticationService: AuthenticationService) {
     this.authFacade.auth$.subscribe((auth: AuthState) => {
-      this.jwtToken.accessToken = auth.accessToken;
-      this.jwtToken.refreshToken = auth.accessToken;
-    });
-  }
+      this.auth = auth;
 
-  private addAccessToken(
-    request: HttpRequest<unknown>,
-    accessToken: string
-  ): HttpRequest<unknown> {
-    return (request = request.clone({
-      setHeaders: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    }));
+      if(auth.accessToken && auth.refreshToken) {
+        console.log(new Date(JwtUtil.expirationTime(auth.accessToken)));
+        console.log(new Date(JwtUtil.expirationTime(auth.refreshToken)));
+      }
+    });
   }
 
   // intercept the request
@@ -36,24 +30,73 @@ export class JwtInterceptor implements HttpInterceptor {
     request: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
-    const accessToken = this.jwtToken.accessToken;
-    if (accessToken) {
-      request = this.addAccessToken(request, accessToken);
-    }
-    return this.handleNext(request, next);
-  }
-
-  handleNext(
-    request: HttpRequest<unknown>,
-    next: HttpHandler
-  ): Observable<HttpEvent<unknown>> {
-    return next.handle(request).pipe(
-      catchError((err) => {
-        if (err.status === 401 || err.status === 403) {
-          this.authFacade.logout();
+    return next.handle(this.addAuthorizationHeader(request, this.auth.accessToken)).pipe(
+      catchError((error: HttpEvent<any>) => {
+        // error 401
+        if (error instanceof HttpErrorResponse && error.status === 401) {
+          if (this.auth.accessToken && this.auth.refreshToken) {
+            return this.refreshToken(request, next);
+          } else {
+            return this.logout(error);
+          }
         }
-        return throwError(err);
+        return throwError(error);
       })
     );
+  }
+
+  private addAuthorizationHeader(
+    request: HttpRequest<unknown>,
+    accessToken: string
+  ): HttpRequest<unknown> {
+    request = request.clone({
+      setHeaders: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return request;
+  }
+
+  private logout(error: any) {
+    this.authFacade.logout();
+    return throwError(error);
+  }
+
+  private refreshToken(
+    request: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
+
+    console.log("refresh token");
+    if(!this.refreshingInProgress) {
+      this.refreshingInProgress = true;
+      this.accessTokenSubject.next(null);
+
+      return this.authenticationService.refreshAccessToken(this.auth.refreshToken).pipe(
+        switchMap(
+          (response) => {
+            this.refreshingInProgress = false;
+            this.authFacade.setAccessToken(response.accessToken);
+            return next.handle(
+              this.addAuthorizationHeader(request, response.accessToken)
+            );
+          }
+        )
+      );
+    }
+    else {
+
+      return this.accessTokenSubject.pipe(
+        filter(
+          (accessToken) => accessToken !== null
+        ),
+        take(1),
+        switchMap(
+          (accessToken) => {
+            return next.handle(this.addAuthorizationHeader(request, accessToken));
+          }
+        )
+      );
+    }
   }
 }
