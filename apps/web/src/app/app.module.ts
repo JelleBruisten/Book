@@ -17,6 +17,7 @@ import { AuthFacade } from './store/auth/auth.facade';
 import { environment } from 'apps/api/src/environments/environment';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import { AuthenticationService } from './authentication/services/authentication.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -39,11 +40,11 @@ import { StoreRouterConnectingModule } from '@ngrx/router-store';
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
-      useFactory: function (authFacade: AuthFacade) {
-        return new JwtInterceptor(authFacade);
+      useFactory: (authFacade: AuthFacade, authenticationService: AuthenticationService) => {
+        return new JwtInterceptor(authFacade, authenticationService);
       },
       multi: true,
-      deps: [AuthFacade, Router],
+      deps: [AuthFacade, AuthenticationService],
     },
   ],
   bootstrap: [AppComponent],

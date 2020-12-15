@@ -35,6 +35,12 @@ export class AuthenticationService {
     return of();
   }
 
+  refresh(refreshToken: string) {
+    return this.http.put<{ accessToken: string }>(apiUrl, {
+      refreshToken
+    });
+  }
+
   // setToken(accessToken: string) {
   //   if (!this.loggedInSubject.value) {
   //     this.loggedInSubject.next(true);

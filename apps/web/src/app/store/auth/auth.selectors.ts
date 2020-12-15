@@ -5,7 +5,7 @@ export const getAuthFeatureState = createFeatureSelector(authFeatureName);
 
 export const selectIsAuthenticated = createSelector(
   getAuthFeatureState,
-  (state: AuthState) => state.isLoggedIn
+  (state: AuthState) => !!state.accessToken
 );
 
 export const selectAccessToken = createSelector(

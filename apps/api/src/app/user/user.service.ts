@@ -1,11 +1,10 @@
 import { User } from '@book/interfaces';
 import { Injectable } from '@nestjs/common';
 
-type UserWithRefreshToken = User & { refreshToken?: string };
+export type UserWithRefreshToken = User & { refreshToken?: string };
 
 @Injectable()
 export class UserService {
-
   private readonly users: UserWithRefreshToken[] = [
     {
       userId: '1',
@@ -24,16 +23,23 @@ export class UserService {
     },
   ];
 
-  async findUser(username: string): Promise<User | undefined> {
-    return this.users.find((user: User) => user.username === username);
+  async findUser(username: string): Promise<UserWithRefreshToken | undefined> {
+    return this.users.find(
+      (user: UserWithRefreshToken) => user.username === username
+    );
   }
 
-  async findUserById(userId: string | number): Promise<User | undefined> {
-    return this.users.find((user: User) => user.userId === userId);
+  async findUserById(userId: string | number): Promise<UserWithRefreshToken | undefined> {
+    return this.users.find((user: UserWithRefreshToken) => user.userId === userId);
   }
 
   async setToken(userId: string, token: string) {
-    const user = this.users.find((user: User) => user.userId === userId);
+    const user = this.users.find((user: UserWithRefreshToken) => user.userId === userId);
     user.refreshToken = token;
-  }  
+  }
+
+  async tokenMatchesUser(userId: string, token: string) {
+    const user = this.users.find((user: UserWithRefreshToken) => user.userId === userId);
+    return user.refreshToken === token;
+  }
 }

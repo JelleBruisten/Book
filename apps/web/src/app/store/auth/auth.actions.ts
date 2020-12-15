@@ -22,3 +22,6 @@ export const loginClear = createAction('[Auth] loginClear');
 // logout
 export const logout = createAction('[Auth] logout');
 export const logoutComplete = createAction('[Auth] logoutComplete');
+
+// refresh token
+export const refreshAccessToken = createAction('[Auth] refreshAccessToken', props<{ accessToken: string }>());

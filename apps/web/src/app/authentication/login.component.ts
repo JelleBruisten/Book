@@ -23,7 +23,12 @@ export class LoginComponent implements OnInit {
     for (const userProperty of userProperties) {
       formDefinition[userProperty] = [null, Validators.required];
     }
+
     this.loginForm = this.formBuilder.group(formDefinition);
+    this.loginForm.patchValue({
+      username: 'jelle',
+      password: 'test',
+    });
   }
 
   login() {

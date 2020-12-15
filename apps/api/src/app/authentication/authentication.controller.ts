@@ -15,10 +15,9 @@ export class AuthenticationController {
     return this.authenticationService.login(req.user);
   }
 
-  @UseGuards(LocalAuthenticationGuard)
   @Public()
   @Post()
   async refresh(@Request() req: { refreshToken: string }) {
     return this.authenticationService.refresh(req.refreshToken);
-  }  
+  }
 }

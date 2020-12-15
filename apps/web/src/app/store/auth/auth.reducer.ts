@@ -5,16 +5,16 @@ export const authFeatureName = 'auth';
 
 // the shape of our state
 export interface AuthState {
-  isLoggedIn: boolean;
   accessToken: string;
+  refreshToken: string;
   loading: boolean;
   error: boolean;
 }
 
 // initial state
 export const initialAuthState: AuthState = {
-  isLoggedIn: false,
   accessToken: null,
+  refreshToken: null,
   loading: false,
   error: false,
 };
@@ -41,7 +41,6 @@ const authReducerInternal = createReducer(
         ...state,
         accessToken,
         refreshToken,
-        isLoggedIn: true,
         loading: false,
       };
     }
@@ -70,7 +69,14 @@ const authReducerInternal = createReducer(
     return {
       ...state,
       accessToken: null,
-      isLoggedIn: false,
+      refreshToken: null,
+    };
+  }),
+
+  on(authActions.refreshAccessToken, (state, { accessToken }) => {
+    return {
+      ...state,
+      accessToken: accessToken,
     };
   })
 );

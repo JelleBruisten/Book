@@ -33,4 +33,8 @@ export class AuthFacade {
   logout() {
     this.store.dispatch(AuthActions.logout());
   }
+
+  setAccessToken(accessToken: string) {
+    this.store.dispatch(AuthActions.refreshAccessToken({ accessToken }));
+  }
 }
