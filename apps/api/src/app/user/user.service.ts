@@ -20,6 +20,8 @@ export class UserService {
       userId: '3',
       username: 'jelle',
       password: 'test',
+      refreshToken:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImplbGxlIiwic3ViIjoiMyIsImV4cCI6MTYwODA3NzAzNTA5MSwiaWF0IjoxNjA4MDc2NzM1fQ.M8jNkDLFDsrdhnQDWG5mQDWtgUe1oKM3uLxW_bePLec',
     },
   ];
 
@@ -29,17 +31,25 @@ export class UserService {
     );
   }
 
-  async findUserById(userId: string | number): Promise<UserWithRefreshToken | undefined> {
-    return this.users.find((user: UserWithRefreshToken) => user.userId === userId);
+  async findUserById(
+    userId: string | number
+  ): Promise<UserWithRefreshToken | undefined> {
+    return this.users.find(
+      (user: UserWithRefreshToken) => user.userId === userId
+    );
   }
 
   async setToken(userId: string, token: string) {
-    const user = this.users.find((user: UserWithRefreshToken) => user.userId === userId);
+    const user = this.users.find(
+      (user: UserWithRefreshToken) => user.userId === userId
+    );
     user.refreshToken = token;
   }
 
   async tokenMatchesUser(userId: string, token: string) {
-    const user = this.users.find((user: UserWithRefreshToken) => user.userId === userId);
+    const user = this.users.find(
+      (user: UserWithRefreshToken) => user.userId === userId
+    );
     return user.refreshToken === token;
   }
 }

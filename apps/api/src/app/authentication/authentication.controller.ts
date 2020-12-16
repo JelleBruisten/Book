@@ -17,7 +17,7 @@ export class AuthenticationController {
 
   @Public()
   @Put()
-  async refresh(@Request() req: { refreshToken: string }) {
-    return this.authenticationService.refresh(req.refreshToken);
+  async refresh(@Request() req: { body : { refreshToken: string }}) {
+    return this.authenticationService.refresh(req?.body?.refreshToken);
   }
 }

@@ -3,6 +3,11 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
 
+export enum TokenType {
+  AccessToken,
+  RefreshToken
+}
+
 @Injectable()
 export class AuthenticationService {
   constructor(
@@ -28,47 +33,50 @@ export class AuthenticationService {
   }
 
   async refresh(token: string) {
-
-    const tokenData = this.jwtService.decode(token) as { userId: string | number};
-    if(tokenData.userId) {
-
-      const user = await this.userService.findUserById(tokenData.userId);
+    const tokenData = this.jwtService.decode(token) as { sub: string | number};
+    if(tokenData.sub) {
+      const user = await this.userService.findUserById(tokenData.sub);
       if (user.refreshToken === token) {
         throw new UnauthorizedException();
       }
-
       return {
         accessToken: this.createAccessToken(user)
       };
     }
-    return false;
+    return true;
   }
 
   createAccessToken(user: User) {
-    const expires = Date.now() + 1 * 30 * 1000;
+    // const expires = Date.now() + 1 * 30;
     const payload = {
       username: user.username,
       sub: user.userId,
-      exp: expires
+      type: TokenType.AccessToken
+      // exp: expires * 1000
     };
 
-    const token = this.jwtService.sign(payload);
-    console.log(new Date(expires));
+    const token = this.jwtService.sign(payload, {
+      expiresIn: '30s'
+    });
+    // console.log(new Date(expires * 1000));
     console.log(this.jwtService.decode(token));
     return token;
   }
 
   async createRefreshToken(user: User) {
-    const expires = Date.now() + 5 * 60 * 1000;
+    // const expires = Date.now() + 5 * 60;
     const payload = {
       username: user.username,
       sub: user.userId,
-      exp: expires,
+      type: TokenType.RefreshToken,
+      // exp: expires,
     };
 
-    const token = this.jwtService.sign(payload);
-    console.log(new Date(expires));
-    console.log(this.jwtService.decode(token));
+    const token = this.jwtService.sign(payload, {
+      expiresIn: '7d',
+    });
+    // console.log(new Date(expires));
+    // console.log(this.jwtService.decode(token));
     await this.userService.setToken(user.userId, token);
     return token;
   }

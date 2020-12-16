@@ -67,7 +67,6 @@ export class JwtInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
 
-    console.log("refresh token");
     if(!this.refreshingInProgress) {
       this.refreshingInProgress = true;
       this.accessTokenSubject.next(null);
@@ -76,6 +75,7 @@ export class JwtInterceptor implements HttpInterceptor {
         switchMap(
           (response) => {
             this.refreshingInProgress = false;
+            console.log(response);
             this.authFacade.setAccessToken(response.accessToken);
             return next.handle(
               this.addAuthorizationHeader(request, response.accessToken)
