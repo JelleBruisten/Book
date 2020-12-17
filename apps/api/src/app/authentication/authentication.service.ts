@@ -68,7 +68,7 @@ export class AuthenticationService {
     };
 
     const token = this.jwtService.sign(payload, {
-      expiresIn: '1s'
+      expiresIn: '5m'
     });
     // console.log(new Date(expires * 1000));
     console.log(this.jwtService.decode(token));
