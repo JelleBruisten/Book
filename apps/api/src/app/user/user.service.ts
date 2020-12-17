@@ -21,7 +21,7 @@ export class UserService {
       username: 'jelle',
       password: 'test',
       refreshToken:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImplbGxlIiwic3ViIjoiMyIsImV4cCI6MTYwODA3NzAzNTA5MSwiaWF0IjoxNjA4MDc2NzM1fQ.M8jNkDLFDsrdhnQDWG5mQDWtgUe1oKM3uLxW_bePLec',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImplbGxlIiwic3ViIjoiMyIsInR5cGUiOjEsImlhdCI6MTYwODI0MjQ2MSwiZXhwIjoxNjA4ODQ3MjYxfQ.LzhhuwW-5BRWm09kU_cOhaOL_braVNcLk0A3sZDVWNs'
     },
   ];
 

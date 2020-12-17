@@ -1,5 +1,5 @@
 import { User } from '@book/interfaces';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
 
@@ -33,14 +33,26 @@ export class AuthenticationService {
   }
 
   async refresh(token: string) {
-    const tokenData = this.jwtService.decode(token) as { sub: string | number};
-    if(tokenData.sub) {
+    const tokenData = this.jwtService.decode(token);
+    if(!tokenData) {
+        throw new HttpException(
+          'Cannot decode refreshToken',
+          HttpStatus.UNAUTHORIZED
+        );
+    }
+
+    if (tokenData.sub) {
       const user = await this.userService.findUserById(tokenData.sub);
-      if (user.refreshToken === token) {
-        throw new UnauthorizedException();
+      console.log(user);
+      if (!user) {
+        throw new HttpException(
+          'Cannot find user with refreshToken',
+          HttpStatus.UNAUTHORIZED
+        );
       }
+
       return {
-        accessToken: this.createAccessToken(user)
+        accessToken: this.createAccessToken(user),
       };
     }
     return true;
@@ -56,7 +68,7 @@ export class AuthenticationService {
     };
 
     const token = this.jwtService.sign(payload, {
-      expiresIn: '30s'
+      expiresIn: '1s'
     });
     // console.log(new Date(expires * 1000));
     console.log(this.jwtService.decode(token));

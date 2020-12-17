@@ -11,7 +11,7 @@ export class JwtUtil {
   static expirationTime(accessToken: string): number {
     let parseJwt = JwtUtil.decodeToken(accessToken);
     let expTime = parseJwt.exp;
-    return expTime;
+    return expTime * 1000;
   }
 
   static isExpired(accessToken: string): Boolean {

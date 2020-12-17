@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of, timer } from 'rxjs';
 
@@ -36,9 +36,15 @@ export class AuthenticationService {
   }
 
   refreshAccessToken(refreshToken: string) {
-    return this.http.put<{ accessToken: string }>(apiUrl, {
-      refreshToken
-    });
+    const headers = new HttpHeaders();
+    this.http
+    return this.http.put<{ accessToken: string }>(
+      apiUrl,
+      {},
+      {
+        headers: headers.append('Authorization', refreshToken),
+      }
+    );
   }
 
   // setToken(accessToken: string) {

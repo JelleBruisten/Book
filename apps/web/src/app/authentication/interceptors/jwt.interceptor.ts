@@ -30,10 +30,11 @@ export class JwtInterceptor implements HttpInterceptor {
     request: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
+    console.log(request);
     return next.handle(this.addAuthorizationHeader(request, this.auth.accessToken)).pipe(
       catchError((error: HttpEvent<any>) => {
         // error 401
-        if (error instanceof HttpErrorResponse && error.status === 401) {
+        if (error && (error as any).status === 401) {
           if (this.auth.accessToken && this.auth.refreshToken) {
             return this.refreshToken(request, next);
           } else {
@@ -49,15 +50,20 @@ export class JwtInterceptor implements HttpInterceptor {
     request: HttpRequest<unknown>,
     accessToken: string
   ): HttpRequest<unknown> {
-    request = request.clone({
-      setHeaders: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+
+    if (!request.headers.has('Authorization')) {
+      console.log(request.headers);
+      request = request.clone({
+        setHeaders: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+    }
     return request;
   }
 
   private logout(error: any) {
+    console.log("test");
     this.authFacade.logout();
     return throwError(error);
   }
@@ -70,8 +76,8 @@ export class JwtInterceptor implements HttpInterceptor {
     if(!this.refreshingInProgress) {
       this.refreshingInProgress = true;
       this.accessTokenSubject.next(null);
-
       return this.authenticationService.refreshAccessToken(this.auth.refreshToken).pipe(
+        catchError((e) => this.logout(e)),
         switchMap(
           (response) => {
             this.refreshingInProgress = false;
@@ -81,7 +87,7 @@ export class JwtInterceptor implements HttpInterceptor {
               this.addAuthorizationHeader(request, response.accessToken)
             );
           }
-        )
+        ),
       );
     }
     else {

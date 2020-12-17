@@ -25,10 +25,6 @@ export class LoginComponent implements OnInit {
     }
 
     this.loginForm = this.formBuilder.group(formDefinition);
-    this.loginForm.patchValue({
-      username: 'jelle',
-      password: 'test',
-    });
   }
 
   login() {
